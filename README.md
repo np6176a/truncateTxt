@@ -21,7 +21,7 @@ Free snippet of code to truncate and add ellipses to paragraph dynamically that 
 ```
    $(window).on('load', function (){
      var container = $('.container');
-     var maxContainerHeight = 250
+     var maxContainerHeight = 250;
      ellipses(container,maxContainerHeight);
 
    });
