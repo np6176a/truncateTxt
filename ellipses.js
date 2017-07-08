@@ -1,4 +1,4 @@
-function ellipses(container, containerHeight) {
+window.ellipses=function(container, containerHeight) {
 
     if (container.height() > containerHeight) {
         $(container).each(function () {
