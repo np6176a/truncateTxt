@@ -1,5 +1,8 @@
 $(window).on('load', function (){
 
- ellipses($('.container'),250);
+    var container = $('.container');
+    var maxContainerHeight = 250
+    ellipses(container,maxContainerHeight);
+
 
 });
