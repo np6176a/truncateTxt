@@ -1,10 +1,9 @@
-window.ellipses=function(container, containerHeight) {
-
-    if (container.height() > containerHeight) {
-        $(container).each(function () {
+window.ellipses = function (container, containerHeight) {
+    $(container).each(function () {
+        if ($(this).height() > containerHeight) {
             var wrap = $(this).find('.parawrap');
             var para = $(this).find('.para');
-            var heightDifference = container.height() - containerHeight;
+            var heightDifference = $(this).height() - containerHeight;
             var wrapHeight = wrap.height() - heightDifference;
             var paraLineHeight = parseInt($(this).find('.para').css('line-height')) || 18;
 
@@ -26,6 +25,6 @@ window.ellipses=function(container, containerHeight) {
                 $(wrap).hide();
             }
 
-        });
-    }
+        }
+    });
 }
