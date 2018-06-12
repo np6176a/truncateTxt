@@ -38,8 +38,24 @@ function ellipsesInit() {
 // onload
 $(window).on('load', ellipsesInit());
 
-// onresize
-$(window).on('resize', function ellipses() {
+
+// the bit to make resize happen slowly
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+};
+
+var ellipses = debounce(function () {
   var container = $('.box-content');
   var containerHeight = 200;
   $(container).each(function () {
@@ -67,4 +83,7 @@ $(window).on('resize', function ellipses() {
       $(wrap).hide();
     }
   });
-});
+}, 150);
+
+// onresize
+$(window).on('resize', ellipses);
