@@ -1,43 +1,53 @@
+var container = $('.box-content');
+var containerHeight = 200;
+
+// creating attribute to store original text
+function oriAttr(p, data) {
+  $(p).attr("original", data[0].innerText);
+}
+
+function txtEdit(wrapHeight, p) {
+  var paraLineHeight = parseInt($(p).css('line-height')) || 20;
+
+  if (wrapHeight >= paraLineHeight) {
+    $(p).text($(p).attr('original'));
+    while (p.outerHeight() > wrapHeight) {
+      if (!$(p).text().match(/\W*\s(\S)*$/)) {
+        break
+      }
+      else {
+        $(p).text(function (index, text) {
+          return text.replace(/\W*\s(\S)*$/, '[...]');
+        })
+      };
+    }
+  }
+  else {
+    $(wrap).hide();
+  }
+}
+
+function calcHeight(t, w, p) {
+  var heightDifference = $(t).outerHeight() - containerHeight;
+  var wrapHeight = w.height() - heightDifference;
+  $(w).css('height', wrapHeight);
+  txtEdit(wrapHeight, p);
+}
+
 // the ellipses
 function ellipsesInit() {
-  var container = $('.box-content');
-  var containerHeight = 200;
   $(container).each(function () {
     var wrap = $(this).find('.content');
     var para = $(this).find('p');
     var text = $(para).text();
     var data = $(para).data("content", text);
 
-    $(para).attr("original", data[0].innerText);
+    oriAttr(para, data);
 
-    var heightDifference = $(this).outerHeight() - containerHeight;
-    var wrapHeight = wrap.height() - heightDifference;
-    var paraLineHeight = parseInt($(this).find('p').css('line-height')) || 20;
-    $(wrap).css('height', wrapHeight);
+    calcHeight(this, wrap, para);
 
-    if (wrapHeight >= paraLineHeight) {
-      while (para.outerHeight() > wrapHeight) {
-        if (!$(para).text().match(/\W*\s(\S)*$/)) {
-          break
-        }
-        else {
-          $(para).text(function (index, text) {
-            return text.replace(/\W*\s(\S)*$/, '[...]');
-          })
-        }
-        ;
-      }
-    }
-    else {
-      $(wrap).hide();
-    }
   });
 }
-
-
-// onload
-$(window).on('load', ellipsesInit());
-
 
 // the bit to make resize happen slowly
 function debounce(func, wait, immediate) {
@@ -56,34 +66,20 @@ function debounce(func, wait, immediate) {
 };
 
 var ellipses = debounce(function () {
-  var container = $('.box-content');
-  var containerHeight = 200;
+
   $(container).each(function () {
     var wrap = $(this).find('.content');
     var para = $(this).find('p');
-    var heightDifference = $(this).outerHeight() - containerHeight;
-    var wrapHeight = wrap.height() - heightDifference;
-    var paraLineHeight = parseInt($(this).find('p').css('line-height')) || 20;
-    $(wrap).css('height', wrapHeight);
-    if (wrapHeight >= paraLineHeight) {
-      $(para).text($(para).attr('original'));
-      while (para.outerHeight() > wrapHeight) {
-        if (!$(para).text().match(/\W*\s(\S)*$/)) {
-          break
-        }
-        else {
-          $(para).text(function (index, text) {
-            return text.replace(/\W*\s(\S)*$/, '[...]');
-          })
-        }
-        ;
-      }
-    }
-    else {
-      $(wrap).hide();
-    }
+
+    calcHeight(this, wrap, para);
+
   });
+
 }, 150);
+
+
+// onload
+$(window).on('load', ellipsesInit());
 
 // onresize
 $(window).on('resize', ellipses);
